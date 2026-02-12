@@ -56,124 +56,76 @@
 // - Mostrar cuantos **campers** perdieron y aprobaron cada uno de los módulos teniendo en cuenta la ruta de entrenamiento y el entrenador encargado.
 
 
-function crearCamper(id, nombres, apellidos, direccion, acudiente, celular, fijo) {
-    return {
+let campers = [];
+let trainers = [];
+let rutas = [];
+let matriculas = [];
+
+function crearCamper() {
+    let id = prompt("Ingrese ID:");
+    let nombres = prompt("Ingrese nombres:");
+    let apellidos = prompt("Ingrese apellidos:");
+    let direccion = prompt("Ingrese dirección:");
+    let acudiente = prompt("Ingrese acudiente:");
+    let celular = prompt("Ingrese celular:");
+    let fijo = prompt("Ingrese teléfono fijo:");
+
+    let camper = {
         id,
         nombres,
         apellidos,
         direccion,
         acudiente,
         telefonos: { celular, fijo },
-        estado: "En proceso de ingreso",
+        estado: "Inscrito",
         riesgo: false,
         modulos: []
-    }
+    };
+
+    campers.push(camper);
+    alert("Camper registrado correctamente");
 }
 
-const campers = [
-    crearCamper(1, "Tomas", "Esteban", "Calle 1", "Maria", "123", "456"),
-    crearCamper(2, "Juan", "Perez", "Calle 2", "Carlos", "789", "111"),
-    crearCamper(3, "Maria", "Gomez", "Calle 3", "Ana", "222", "333")
-];
+function registrarNotaInicial() {
+    let id = prompt("Ingrese ID del camper:");
+    let camper = campers.find(c => c.id == id);
 
-
-function crearTrainer(id, nombres, apellidos, rutas = []) {
-    return {
-        id,
-        nombres,
-        apellidos,
-        rutas
+    if (!camper) {
+        alert("Camper no encontrado");
+        return;
     }
-}
 
-const trainers = [
-    crearTrainer(1, "Pedro", "Gomez", ["Ruta NodeJS", "Ruta Java"]),
-    crearTrainer(2, "Ana", "Lopez", ["Ruta NetCore"])
-];
+    let teorica = Number(prompt("Nota teórica:"));
+    let practica = Number(prompt("Nota práctica:"));
 
-function crearModulo(nombre) {
-    return {
-        nombre,
-        pesoTeorico: 0.3,
-        pesoPractico: 0.6,
-        pesoQuizes: 0.1
-    }
-}
-
-function crearRuta(nombre, sgdbPrincipal, sgdbAlternativo) {
-    return {
-        nombre,
-        sgdbPrincipal,
-        sgdbAlternativo,
-        modulos: [
-            crearModulo("Fundamentos de Programación"),
-            crearModulo("Programación Web"),
-            crearModulo("Programación Formal"),
-            crearModulo("Bases de Datos"),
-            crearModulo("Backend")
-        ]
-    }
-}
-
-const rutas = [
-    crearRuta("Ruta NodeJS", "MongoDB", "PostgreSQL"),
-    crearRuta("Ruta Java", "MySQL", "PostgreSQL"),
-    crearRuta("Ruta NetCore", "SQL Server", "MySQL")
-];
-
-
-function registrarNotaInicial(camper, notaTeorica, notaPractica) {
-    const promedio = (notaTeorica + notaPractica) / 2;
+    let promedio = (teorica + practica) / 2;
 
     if (promedio >= 60) {
         camper.estado = "Aprobado";
     } else {
-        camper.estado = "Inscrito";
-    }
-}
-
-function evaluarModulo(camper, modulo, notaTeorica, notaPractica, notaQuizes) {
-    const notaFinal =
-        (notaTeorica * modulo.pesoTeorico) +
-        (notaPractica * modulo.pesoPractico) +
-        (notaQuizes * modulo.pesoQuizes);
-
-    const aprobado = notaFinal >= 60;
-
-    camper.modulos.push({
-        nombre: modulo.nombre,
-        notaFinal,
-        aprobado
-    });
-
-    if (!aprobado) {
-        camper.riesgo = true;
+        camper.estado = "Reprobado";
     }
 
-    return notaFinal;
+    alert("Estado actualizado: " + camper.estado);
 }
 
+function matricularCamper() {
+    let id = prompt("Ingrese ID del camper:");
+    let camper = campers.find(c => c.id == id);
 
-
-const areas = [
-    { nombre: "Salon 1", capacidad: 33 },
-    { nombre: "Salon 2", capacidad: 33 },
-    { nombre: "Salon 3", capacidad: 33 }
-];
-
-const matriculas = [];
-
-function matricularCamper(camper, ruta, trainer, fechaInicio, fechaFin, salon) {
-
-    const campersEnSalon = matriculas.filter(m => m.salon === salon);
-
-    if (campersEnSalon.length >= 33) {
-        console.log("Capacidad máxima alcanzada en", salon);
+    if (!camper || camper.estado !== "Aprobado") {
+        alert("El camper no está aprobado");
         return;
     }
 
-    if (camper.estado !== "Aprobado") {
-        console.log("El camper no ha aprobado el examen inicial");
+    let ruta = prompt("Ingrese nombre de la ruta:");
+    let trainer = prompt("Ingrese nombre del trainer:");
+    let salon = prompt("Ingrese salón:");
+
+    let campersEnSalon = matriculas.filter(m => m.salon === salon);
+
+    if (campersEnSalon.length >= 33) {
+        alert("Salón lleno");
         return;
     }
 
@@ -183,76 +135,83 @@ function matricularCamper(camper, ruta, trainer, fechaInicio, fechaFin, salon) {
         camper,
         ruta,
         trainer,
-        fechaInicio,
-        fechaFin,
         salon
     });
 
-    console.log("Camper matriculado correctamente");
+    alert("Matriculado correctamente");
 }
 
+function evaluarModulo() {
+    let id = prompt("Ingrese ID del camper:");
+    let camper = campers.find(c => c.id == id);
 
+    if (!camper) {
+        alert("No encontrado");
+        return;
+    }
 
-function listarInscritos() {
-    return campers.filter(c => c.estado === "Inscrito");
+    let nombreModulo = prompt("Nombre del módulo:");
+    let teorica = Number(prompt("Nota teórica:"));
+    let practica = Number(prompt("Nota práctica:"));
+    let quizes = Number(prompt("Nota quizes:"));
+
+    let notaFinal =
+        (teorica * 0.3) +
+        (practica * 0.6) +
+        (quizes * 0.1);
+
+    let aprobado = notaFinal >= 60;
+
+    camper.modulos.push({
+        nombre: nombreModulo,
+        notaFinal,
+        aprobado
+    });
+
+    if (!aprobado) {
+        camper.riesgo = true;
+    }
+
+    alert("Nota final: " + notaFinal);
 }
 
-function listarAprobadosInicial() {
-    return campers.filter(c => c.estado === "Aprobado");
+function listarRiesgo() {
+    let enRiesgo = campers.filter(c => c.riesgo);
+    console.log(enRiesgo);
 }
+let opcion;
 
-function listarTrainers() {
-    return trainers.map(t => t.nombres + " " + t.apellidos);
-}
+do {
+    opcion = prompt(`
+1. Registrar Camper
+2. Registrar Nota Inicial
+3. Matricular Camper
+4. Evaluar Módulo
+5. Ver Campers en Riesgo
+0. Salir
+`);
 
-function listarCampersRiesgo() {
-    return campers.filter(c => c.riesgo === true);
-}
+    switch(opcion) {
+        case "1":
+            crearCamper();
+            break;
+        case "2":
+            registrarNotaInicial();
+            break;
+        case "3":
+            matricularCamper();
+            break;
+        case "4":
+            evaluarModulo();
+            break;
+        case "5":
+            listarRiesgo();
+            break;
+        case "0":
+            alert("Saliendo...");
+            break;
+        default:
+            alert("Opción inválida");
+    }
 
-function listarPorRuta(nombreRuta) {
-    return matriculas
-        .filter(m => m.ruta.nombre === nombreRuta)
-        .map(m => ({
-            camper: m.camper.nombres,
-            trainer: m.trainer.nombres
-        }));
-}
-
-
-function reporteModulo(rutaNombre, moduloNombre) {
-    let aprobados = 0;
-    let reprobados = 0;
-
-    matriculas
-        .filter(m => m.ruta.nombre === rutaNombre)
-        .forEach(m => {
-            const modulo = m.camper.modulos.find(mod => mod.nombre === moduloNombre);
-            if (modulo) {
-                modulo.aprobado ? aprobados++ : reprobados++;
-            }
-        });
-
-    return { aprobados, reprobados };
-}
-
-registrarNotaInicial(campers[0], 70, 80);
-registrarNotaInicial(campers[1], 50, 40);
-registrarNotaInicial(campers[2], 90, 90);
-
-
-matricularCamper(
-    campers[0],
-    rutas[0],
-    trainers[0],
-    "2024-01-01",
-    "2024-06-30",
-    "Salon 1"
-);
-
-evaluarModulo(campers[0], rutas[0].modulos[0], 70, 80, 90);
-
-console.log("Inscritos:", listarInscritos());
-console.log("Aprobados Inicial:", listarAprobadosInicial());
-console.log("En Riesgo:", listarCampersRiesgo());
-console.log("Por Ruta:", listarPorRuta("Ruta NodeJS"));
-console.log("Reporte Módulo:", reporteModulo("Ruta NodeJS", "Fundamentos de Programación"));
+} while(opcion !== "0");
