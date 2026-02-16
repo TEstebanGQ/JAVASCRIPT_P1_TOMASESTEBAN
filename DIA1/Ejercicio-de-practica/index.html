@@ -1,12 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>CampusLands - Sistema de Gestión Académica</title>
+    <link rel="stylesheet" href="./styles/style.css">
 </head>
 <body>
-    
+    <div class="container">
+        <header class="header">
+            <h1>CampusLands - Sistema de Gestión Académica</h1>
+            <div id="userInfo" class="user-info"></div>
+        </header>
+
+        <main class="main-content">
+            <div id="loginSection" class="section">
+                <h2>Iniciar Sesión</h2>
+                <div class="form-group">
+                    <label>Seleccionar Rol:</label>
+                    <select id="rolSelect" class="input">
+                        <option value="Coordinador">Coordinador</option>
+                        <option value="Trainer">Trainer</option>
+                        <option value="Camper">Camper</option>
+                    </select>
+                </div>
+                <button onclick="iniciarSesion()" class="btn btn-primary">Ingresar</button>
+            </div>
+
+            <div id="menuSection" class="section hidden">
+                <h2>Menú Principal</h2>
+                <div id="menuOptions" class="menu-grid"></div>
+                <button onclick="cerrarSesion()" class="btn btn-secondary">Cerrar Sesión</button>
+            </div>
+
+            <div id="formSection" class="section hidden">
+                <button onclick="volverMenu()" class="btn btn-back">← Volver al Menú</button>
+                <div id="formContent"></div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>© 2024 CampusLands - Sistema Académico v2.0</p>
+        </footer>
+    </div>
+
+    <script src="./scripts/data.js"></script>
+    <script src="./scripts/storage.js"></script>
+    <script src="./scripts/campers.js"></script>
+    <script src="./scripts/trainers.js"></script>
+    <script src="./scripts/rutas.js"></script>
+    <script src="./scripts/matriculas.js"></script>
+    <script src="./scripts/evaluaciones.js"></script>
+    <script src="./scripts/reportes.js"></script>
+    <script src="./scripts/main.js"></script>
 </body>
-<script src="./scripts/script.js"></script>
 </html>
